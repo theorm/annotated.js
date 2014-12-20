@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Language" content="en_US" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="../main.css"/>
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+
+    <script type="text/javascript" src="../modernizr.min.js"></script>
+    <script type="text/javascript" src="../bower_components/d3/d3.min.js"></script>
+    <script type="text/javascript" src="../main.js"></script>
+
+    <script type="text/javascript" src="jquery.min.js"></script>
+
+    <script>
+      $(function() {
+        var annotationsIndex = {};
+
+        $.getJSON('annotations.json', function(annotations) {
+
+          annotations.forEach(function(annotation) {
+            annotationsIndex[annotation.id] = annotation;
+          });
+
+          $("[data-annotated]").each(function(idx, annotatedElement) {
+            var $el = $(annotatedElement);
+            var annotationId = $el.data('annotated');
+
+            var annotated = new Annotated(annotatedElement, 
+              annotationsIndex[annotationId], 
+              {
+                opacity: 0.55,
+                animationDuration: 300
+              }
+            );
+
+            $el.data('annotation', annotated);
+          });
+
+        });
+      });
+    </script>
+
+  </head>
+  <body>
+
+    <div data-annotated="tannery" class="annotated">
+      <img src="tannery.jpg"/>
+    </div>
+  
+  </body>
+</html>

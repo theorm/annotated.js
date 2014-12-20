@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+}
+
+.annotated {
+  margin: 0px;
+}
+
+
+@media(max-width: 480px) {
+  .annotated .caption {
+    font-size: 0.6em;
+  }
+}

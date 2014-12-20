@@ -1,0 +1,27 @@
+{
+  "name": "annotated.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/theorm/annotate.js",
+  "authors": [
+    "Roman Kalyakin <roman@kalyakin.com>"
+  ],
+  "description": "Annotate images and video",
+  "main": "main.js",
+  "keywords": [
+    "multimedia",
+    "svg",
+    "annotate",
+    "hotspot"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.5.2"
+  }
+}
