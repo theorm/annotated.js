@@ -13,36 +13,33 @@
 .annotated {
 
   position: relative;
+  overflow: hidden;
 
-  img, video {
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
-
-  svg {
-    z-index: 1;
-
+  .wrapper {
     position: absolute;
-    top: 0;
-    left: 0;
-
-    // hotspot info
-    .enabler {
-      z-index: 5;
-      fill: #000;
-      stroke: #ccc;
-      stroke-width: 0.3;
+  
+    img, video {
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
 
-    circle {
-      cursor: pointer;
-      opacity: @no-opacity;
-      -webkit-transform: translateZ(0);
+    svg {
+      z-index: 1;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      circle {
+        cursor: pointer;
+        opacity: @no-opacity;
+        -webkit-transform: translateZ(0);
+      }
     }
+
   }
-
 
   .caption {
     position: absolute;
@@ -59,6 +56,23 @@
       &.left {
         float: right;
       }
+    }
+  }
+
+  svg.hotspot {
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    z-index: 5;
+    bottom: 0;
+    left: 0;
+
+    // hotspot info
+    .enabler {
+      fill: #000;
+      stroke: #ccc;
+      stroke-width: 0.3;
+      cursor: pointer;
     }
   }
 

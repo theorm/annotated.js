@@ -11,11 +11,29 @@ function Annotated(element, annotation, options) {
   this.uniqueId = 'annotated-' + this.annotation.id.replace(' ', '-')
     .toLowerCase();
 
+  this.imageUrl = this.element.attr('data-annotated-img');
+
+  /*
+    Element structure:
+      .wrapper
+        img
+        svg
+      .caption
+      svg.hotspot
+  */
+
   this.element.classed('annotated', true);
-  this.svg = this.element.append('svg');
+
+  this.hotspotSvg = this.element.append('svg');
+  
+  this.wrapper = this.element.append('div').classed('wrapper', true);
+
+  this.svg = this.wrapper.append('svg');
+  this.img = this.wrapper.append('img').attr('src', this.imageUrl);
 
   this.caption = this.element.append('div');
   this.captionContent = this.caption.append('div').classed('content', true);
+
 
   this._create();
 }
@@ -30,6 +48,7 @@ Annotated.prototype._getTrueHeight = function(h) {
 
 Annotated.prototype._create = function() {
   this.svg.attr('viewBox', '0 0 100 ' + this._getTrueHeight(100));
+  this.hotspotSvg.attr('viewBox', '0 0 10 10').classed('hotspot', true);
   this.caption.classed('caption', true);
 
 
@@ -111,11 +130,11 @@ Annotated.prototype._create = function() {
 
   this.circleObjects = circleObjects;
 
-  this.infoHotspot = this.svg.append('g').append('circle')
+  this.infoHotspot = this.hotspotSvg.append('g').append('circle')
     .classed('enabler', true)
-    .attr('cx', 3)
-    .attr('cy', this._getTrueHeight(95))
-    .attr('r', 2)
+    .attr('cx', 5)
+    .attr('cy', 5)
+    .attr('r', 3.5)
     .style('opacity', this.opacity);
 
   if (!this._isTouchDevice()) {
@@ -123,6 +142,37 @@ Annotated.prototype._create = function() {
   } else {
     this.infoHotspot.on('touchstart', function() { self._onInfo(); });
   }
+
+  d3.select(window).on('resize', function() { self._resized(); });
+  this._resized();
+};
+
+Annotated.prototype._resized = function() {
+  var h = parseInt(this.element.style('height'), 10);
+  var w = parseInt(this.element.style('width'), 10);
+  var currentAspectRatio = h/w;
+
+  if (currentAspectRatio > this.aspectRatio) {
+    // container is highert than image
+    var wrapperWidth = h / this.aspectRatio;
+    var wrapperLeftOffset = (wrapperWidth - w) / 2;
+
+    this.wrapper.style('width', wrapperWidth + 'px');
+    this.wrapper.style('height', undefined);
+    this.wrapper.style('top', undefined);
+    this.wrapper.style('left', -wrapperLeftOffset + 'px');
+
+  } else {
+    // container is wider than image
+    var wrapperHeight = w * this.aspectRatio;
+    var wrapperTopOffset = (wrapperHeight - h) / 2;
+
+    this.wrapper.style('width', undefined);
+    this.wrapper.style('height', wrapperHeight + 'px');
+    this.wrapper.style('top', -wrapperTopOffset + 'px');
+    this.wrapper.style('left', undefined);
+  }
+
 };
 
 Annotated.prototype._hotSpotOn = function(circle) {
@@ -132,8 +182,10 @@ Annotated.prototype._hotSpotOn = function(circle) {
 
   var d = {};
 
-  d.left = cb.left - ib.left;
-  d.right = ib.right - cb.right;
+  // width from the left
+  d.left = cb.left - ib.left - Math.abs(ib.left);
+  // width from the right
+  d.right = ib.right - cb.right  - Math.abs(ib.left);
   d.top = cb.top - ib.top;
   d.bottom = ib.bottom - cb.bottom;
 
@@ -150,12 +202,12 @@ Annotated.prototype._hotSpotOn = function(circle) {
   var captionLeft, captionTop;
 
   if (toTheLeft) {
-    captionLeft = cb.left - width - d.left * 0.05 - ib.left;
+    captionLeft = cb.left - width - d.left * 0.05;
   } else {
-    captionLeft = cb.right + d.right * 0.05 - ib.left;
+    captionLeft = cb.right + d.right * 0.05;
   }
 
-  captionTop = cb.top + cb.height/2 - height/2 - ib.top;
+  captionTop = cb.top + cb.height/2 - height/2;
 
   if (captionTop < 0) 
     captionTop = 0;

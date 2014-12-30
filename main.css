@@ -1,26 +1,24 @@
 .annotated {
   position: relative;
+  overflow: hidden;
 }
-.annotated img,
-.annotated video {
+.annotated .wrapper {
+  position: absolute;
+}
+.annotated .wrapper img,
+.annotated .wrapper video {
   width: 100%;
   top: 0;
   left: 0;
   z-index: -1;
 }
-.annotated svg {
+.annotated .wrapper svg {
   z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
 }
-.annotated svg .enabler {
-  z-index: 5;
-  fill: #000;
-  stroke: #ccc;
-  stroke-width: 0.3;
-}
-.annotated svg circle {
+.annotated .wrapper svg circle {
   cursor: pointer;
   opacity: 0.0001;
   -webkit-transform: translateZ(0);
@@ -39,6 +37,20 @@
 }
 .annotated .caption .content.left {
   float: right;
+}
+.annotated svg.hotspot {
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  z-index: 5;
+  bottom: 0;
+  left: 0;
+}
+.annotated svg.hotspot .enabler {
+  fill: #000;
+  stroke: #ccc;
+  stroke-width: 0.3;
+  cursor: pointer;
 }
 .annotated .hotspots,
 .annotated .caption {
