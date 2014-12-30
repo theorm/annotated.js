@@ -143,11 +143,11 @@ Annotated.prototype._create = function() {
     this.infoHotspot.on('touchstart', function() { self._onInfo(); });
   }
 
-  d3.select(window).on('resize', function() { self._resized(); });
-  this._resized();
+  d3.select(window).on('resize', function() { self.resize(); });
+  this.resize();
 };
 
-Annotated.prototype._resized = function() {
+Annotated.prototype.resize = function() {
   var h = parseInt(this.element.style('height'), 10);
   var w = parseInt(this.element.style('width'), 10);
   var currentAspectRatio = h/w;
@@ -161,7 +161,6 @@ Annotated.prototype._resized = function() {
     this.wrapper.style('height', undefined);
     this.wrapper.style('top', undefined);
     this.wrapper.style('left', -wrapperLeftOffset + 'px');
-
   } else {
     // container is wider than image
     var wrapperHeight = w * this.aspectRatio;
