@@ -12,6 +12,7 @@ function Annotated(element, annotation, options) {
     .toLowerCase();
 
   this.imageUrl = this.element.attr('data-annotated-img');
+  this.videoUrl = this.element.attr('data-annotated-video');
 
   /*
     Element structure:
@@ -29,7 +30,13 @@ function Annotated(element, annotation, options) {
   this.wrapper = this.element.append('div').classed('wrapper', true);
 
   this.svg = this.wrapper.append('svg');
-  this.img = this.wrapper.append('img').attr('src', this.imageUrl);
+  
+  if (this.imageUrl) {
+    this.img = this.wrapper.append('img').attr('src', this.imageUrl);
+  } else if (this.videoUrl) {
+    this.video = this.wrapper.append('video')
+      .attr('src', this.videoUrl);
+  }
 
   this.caption = this.element.append('div');
   this.captionContent = this.caption.append('div').classed('content', true);
@@ -193,7 +200,7 @@ Annotated.prototype._hotSpotOn = function(circle) {
 
   this.captionContent
     .classed('left', toTheLeft)
-    .text(circle.datum().caption);
+    .html(circle.datum().caption);
 
   this.caption.style('width', width + 'px');
   var height = parseInt(this.captionContent.style('height'), 10);
@@ -260,4 +267,19 @@ Annotated.prototype._onInfo = function() {
     }, self.animationDuration*2);
   }, 600);
 }
+
+Annotated.prototype.play = function() {
+  if (this.video) {
+    this.video[0][0].play();
+  }
+};
+
+Annotated.prototype.stop = function() {
+  if (this.video) {
+    this.video[0][0].pause();
+    this.video[0][0].currentTime = this.video[0][0].currentTime - 0.4;
+  }
+};
+
+
 
