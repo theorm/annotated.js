@@ -13,6 +13,7 @@ function Annotated(element, annotation, options) {
 
   this.imageUrl = this.element.attr('data-annotated-img');
   this.videoUrl = this.element.attr('data-annotated-video');
+  this.videoPosterUrl = this.element.attr('data-annotated-video-poster');
 
   /*
     Element structure:
@@ -27,7 +28,9 @@ function Annotated(element, annotation, options) {
 
   this.hotspotSvg = this.element.append('svg');
   
-  this.wrapper = this.element.append('div').classed('wrapper', true);
+  this.wrapper = this.element.append('div')
+    .classed('wrapper', true)
+    .attr('width', 100);
 
   this.svg = this.wrapper.append('svg');
   
@@ -35,7 +38,18 @@ function Annotated(element, annotation, options) {
     this.img = this.wrapper.append('img').attr('src', this.imageUrl);
   } else if (this.videoUrl) {
     this.video = this.wrapper.append('video')
-      .attr('src', this.videoUrl);
+
+    var self = this;
+    this.video.selectAll('source')
+      .data(['mp4', 'ogg', 'webm'])
+      .enter()
+        .append('source')
+        .attr('src', function(d) { return self.videoUrl + '.' + d; })
+        .attr('type', function(d) { return 'video/' + d; });
+
+    if (this.videoPosterUrl) {
+      this.video.attr('poster', this.videoPosterUrl);
+    }
   }
 
   this.caption = this.element.append('div');
