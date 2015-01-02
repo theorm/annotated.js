@@ -301,5 +301,36 @@ Annotated.prototype.stop = function() {
   }
 };
 
+function AnnotatedReader(element) {
+  this.element = element;
+  element = d3.select(element);
+  this.annotations = {
+    id: element.attr('data-annotated'),
+    aspect: element.attr('data-annotated-aspect'),
+  };
+
+  var hotspots = [];
+  element.selectAll('ul[data-annotated-hotspots] li').each(function() {
+    var el = d3.select(this);
+    var xy = (el.attr('data-annotated-centre') || '').split(',');
+    if (xy.length == 2) {
+      hotspots.push({
+        x: parseFloat(xy[0]),
+        y: parseFloat(xy[1]),
+        caption: el.html(),
+      });
+    }
+  });
+
+  this.annotations.hotspots = hotspots;
+}
+
+AnnotatedReader.prototype.getAnnotations = function() {
+  return this.annotations;
+};
 
 
+AnnotatedReader.prototype.buildAnnotation = function(options) {
+  return new Annotated(this.element, 
+    this.annotations, options || {});
+}

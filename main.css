@@ -4,6 +4,7 @@
 }
 .annotated .wrapper {
   position: absolute;
+  width: 100%;
 }
 .annotated .wrapper img,
 .annotated .wrapper video {
@@ -52,6 +53,9 @@
   stroke-width: 0.3;
   cursor: pointer;
 }
+.annotated svg.hotspot .icon {
+  fill: #ccc;
+}
 .annotated .hotspots,
 .annotated .caption {
   -webkit-transition: opacity 0.4s;
@@ -67,6 +71,9 @@
   -khtml-user-select: none;
   -moz-user-select: none;
   user-select: none;
+}
+.annotated ul[data-annotated-hotspots] {
+  display: none;
 }
 /*html.touch .annotated .hotspots {
   transition: none;

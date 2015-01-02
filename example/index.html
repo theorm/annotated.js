@@ -18,37 +18,35 @@
 
     <script>
       $(function() {
-        var annotationsIndex = {};
 
-        $.getJSON('annotations.json', function(annotations) {
+        $("[data-annotated]").each(function(idx, annotatedElement) {
 
-          annotations.forEach(function(annotation) {
-            annotationsIndex[annotation.id] = annotation;
+          var ar = new AnnotatedReader(annotatedElement);
+          var a = ar.buildAnnotation({
+            opacity: 0.55,
+            animationDuration: 300
           });
 
-          $("[data-annotated]").each(function(idx, annotatedElement) {
-            var $el = $(annotatedElement);
-            var annotationId = $el.data('annotated');
-
-            var annotated = new Annotated(annotatedElement, 
-              annotationsIndex[annotationId], 
-              {
-                opacity: 0.55,
-                animationDuration: 300
-              }
-            );
-
-            $el.data('annotation', annotated);
-          });
+          $(annotatedElement).data('annotation', a);
 
         });
+
       });
     </script>
 
   </head>
   <body>
 
-    <div data-annotated="tannery" data-annotated-img="tannery.jpg" class="annotated">
+    <div data-annotated="tannery" data-annotated-img="tannery.jpg" data-annotated-aspect="2/3" class="annotated">
+      <ul data-annotated-hotspots>
+        <li data-annotated-centre="65,40">
+          <img src="tannery.jpg" style="width: 50%;"/><br/>
+          1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </li>
+        <li data-annotated-centre="25,40">
+          2. Rubbish Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </li>
+      </ul>
     </div>
   
   </body>
