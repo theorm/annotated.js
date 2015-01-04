@@ -55,6 +55,10 @@
 }
 .annotated svg.hotspot .icon {
   fill: #ccc;
+  -webkit-transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
+  -khtml-transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
+  -moz-transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
+  transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
 }
 .annotated .hotspots,
 .annotated .caption {
