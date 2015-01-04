@@ -312,13 +312,19 @@ Annotated.prototype._onInfo = function() {
 Annotated.prototype.play = function() {
   if (this.video) {
     this.video[0][0].play();
+    this.video.transition().duration(750)
+      .tween("soundeasein", function() { return function(t) { this.volume = t; } });
   }
 };
 
 Annotated.prototype.stop = function() {
   if (this.video) {
-    this.video[0][0].pause();
-    this.video[0][0].currentTime = this.video[0][0].currentTime - 0.4;
+    this.video.transition().duration(750)
+      .tween("soundeaseout", function() { return function(t) { this.volume = 1-t; } })
+      .each("end", function() { 
+        this.pause() 
+        this.currentTime = this.currentTime - 0.4;
+      });
   }
 };
 
