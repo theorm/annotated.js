@@ -36,8 +36,9 @@ function Annotated(element, annotation, options) {
   
   if (this.imageUrl) {
     this.img = this.wrapper.append('img').attr('src', this.imageUrl);
-  } else if (this.videoUrl) {
+  } else if (this.videoUrl && this._isVideoAutoplaySupported()) {
     this.video = this.wrapper.append('video')
+      .attr('loop', '');
 
     var self = this;
     this.video.selectAll('source')
@@ -50,6 +51,8 @@ function Annotated(element, annotation, options) {
     if (this.videoPosterUrl) {
       this.video.attr('poster', this.videoPosterUrl);
     }
+  } else if (this.videoPosterUrl && !this._isVideoAutoplaySupported()) {
+    this.img = this.wrapper.append('img').attr('src', this.videoPosterUrl);
   }
 
   this.caption = this.element.append('div');
@@ -60,7 +63,11 @@ function Annotated(element, annotation, options) {
 }
 
 Annotated.prototype._isTouchDevice = function() {
-  return Modernizr.touch;
+  return Modernizr.touchevents;
+}
+
+Annotated.prototype._isVideoAutoplaySupported = function() {
+  return Modernizr.videoautoplay;
 }
 
 Annotated.prototype._getTrueHeight = function(h) {
@@ -223,7 +230,21 @@ Annotated.prototype._hotSpotOn = function(circle) {
     .html(circle.datum().caption);
 
   this.caption.style('width', width + 'px');
+
   var height = parseInt(this.captionContent.style('height'), 10);
+
+  if (this.captionContent.selectAll('img')[0].length > 0) {
+
+    var self = this;
+    this.captionContent.selectAll('img').each(function() {
+      if (this.width && this.height === 0) {
+        // XXX ios safari does not report height. Help it here.
+        var aspect = eval(d3.select(this).attr('data-annotated-aspect'));
+        if (!aspect) aspect = self.aspectRatio;
+        height += this.width * aspect;
+      }
+    });
+  }
 
   var captionLeft, captionTop;
 
