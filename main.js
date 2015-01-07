@@ -177,6 +177,10 @@ Annotated.prototype._create = function() {
     this.infoHotspot.on('touchstart', function() { self._onInfo(); });
   }
 
+  if (this.annotation.hotspots.length === 0) {
+    this.hotspotSvg.classed('hidden', true);
+  }
+
   d3.select(window).on('resize', function() { self.resize(); });
   this.resize();
 };
@@ -306,7 +310,7 @@ Annotated.prototype._onInfo = function() {
     setTimeout(function() {
       self.cutOuts.style('opacity', 0.001);
     }, self.animationDuration*2);
-  }, 600);
+  }, 1000);
 }
 
 Annotated.prototype.play = function() {
