@@ -28,7 +28,7 @@ function Annotated(element, annotation, options) {
 
   this.hotspotSvg = this.element.append('svg');
   
-  this.wrapper = this.element.append('div')
+  this.wrapper = this.element.insert('div')
     .classed('wrapper', true)
     .attr('width', 100);
 
@@ -257,7 +257,7 @@ Annotated.prototype._hotSpotOn = function(circle) {
   captionTop = cb.top + cb.height/2 - height/2;
 
   if (captionTop < 0) 
-    captionTop = 0;
+    captionTop = 5;
   if (captionTop + height > ib.bottom) 
     captionTop -= (captionTop + height) - ib.bottom;
 
@@ -322,7 +322,7 @@ Annotated.prototype.stop = function() {
     this.video.transition().duration(750)
       .tween("soundeaseout", function() { return function(t) { this.volume = 1-t; } })
       .each("end", function() { 
-        this.pause() 
+        this.pause();
         this.currentTime = this.currentTime - 0.4;
       });
   }
