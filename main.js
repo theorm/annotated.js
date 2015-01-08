@@ -1,6 +1,9 @@
 function Annotated(element, annotation, options) {
   var options = options || {};
 
+  if (!annotation)
+    throw new Error(element + ' has no annotation');
+
   this.element = d3.select(element);
   this.annotation = annotation;
   this.aspectRatio = 
@@ -60,19 +63,19 @@ function Annotated(element, annotation, options) {
 
 
   this._create();
-}
+};
 
 Annotated.prototype._isTouchDevice = function() {
   return Modernizr.touchevents;
-}
+};
 
 Annotated.prototype._isVideoAutoplaySupported = function() {
   return Modernizr.videoautoplay;
-}
+};
 
 Annotated.prototype._getTrueHeight = function(h) {
   return h * this.aspectRatio;
-}
+};
 
 Annotated.prototype._create = function() {
   this.svg.attr('viewBox', '0 0 100 ' + this._getTrueHeight(100));
@@ -215,7 +218,7 @@ Annotated.prototype.resize = function() {
 Annotated.prototype._hotSpotOn = function(circle) {
 
   var cb = circle[0][0].getBoundingClientRect();
-  var ib = this.svg[0][0].getBoundingClientRect();
+  var ib = this.element[0][0].getBoundingClientRect();
 
   var d = {};
 
@@ -262,8 +265,16 @@ Annotated.prototype._hotSpotOn = function(circle) {
 
   if (captionTop < 0) 
     captionTop = 5;
-  if (captionTop + height > ib.bottom) 
+  if (captionTop + height > ib.bottom) {
     captionTop -= (captionTop + height) - ib.bottom;
+  }
+
+  // if with all calculations above caption gets out of screen bounds
+  // we reduce it's width proportionally using image aspect ratio.
+  if (captionTop < 0) {
+    width -= Math.abs(captionTop) / this.aspectRatio + 5*2; // 5 * 2 - margins
+    captionTop = 5;
+  }
 
   var cutOut = this.cutOuts[0][this._getIndexOfCircle(circle)];
   d3.select(cutOut).style('opacity', 1);
@@ -287,7 +298,7 @@ Annotated.prototype._getIndexOfCircle = function(circle) {
   }
 
   return -1;
-}
+};
 
 Annotated.prototype._hotSpotOff = function(circle) {
   // circle.style('opacity', this.opacity);
@@ -311,7 +322,7 @@ Annotated.prototype._onInfo = function() {
       self.cutOuts.style('opacity', 0.001);
     }, self.animationDuration*2);
   }, 1000);
-}
+};
 
 Annotated.prototype.play = function() {
   if (this.video) {
@@ -354,7 +365,7 @@ function AnnotatedReader(element) {
   });
 
   this.annotations.hotspots = hotspots;
-}
+};
 
 AnnotatedReader.prototype.getAnnotations = function() {
   return this.annotations;
@@ -364,4 +375,4 @@ AnnotatedReader.prototype.getAnnotations = function() {
 AnnotatedReader.prototype.buildAnnotation = function(options) {
   return new Annotated(this.element, 
     this.annotations, options || {});
-}
+};
