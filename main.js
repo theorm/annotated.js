@@ -175,9 +175,14 @@ Annotated.prototype._create = function() {
     // .style('transform', 'scale(0.05) translate(2.3em, 4.2em) rotate(-20deg)');
 
   if (!this._isTouchDevice()) {
-    this.infoHotspot.on('mouseover', function() { self._onInfo(); });
+    this.infoHotspot
+      .on('mouseover', function() { self._onInfo(); })
+      .on('mouseleave', function() { self._offInfo(); });
   } else {
-    this.infoHotspot.on('touchstart', function() { self._onInfo(); });
+    this.infoHotspot
+      .on('touchstart', function() { self._onInfo(); })
+      .on('touchend', function() { self._offInfo(); })
+      .on('touchcancel', function() { self._offInfo(); });
   }
 
   if (this.annotation.hotspots.length === 0) {
@@ -315,13 +320,24 @@ Annotated.prototype._onInfo = function() {
   this.cutOuts.style('opacity', 0.999);
   this.hotspots.style('opacity', 0.999);
 
+  this._infoEnabled = true;
+
   var self = this;
   setTimeout(function() {
-    self.hotspots.style('opacity', 0.001)
+    if (self._infoEnabled)
+      self.hotspots.style('opacity', 0.001)
     setTimeout(function() {
-      self.cutOuts.style('opacity', 0.001);
+      if (self._infoEnabled)
+        self.cutOuts.style('opacity', 0.001);
+      self._infoEnabled = false;
     }, self.animationDuration*2);
   }, 1000);
+};
+
+Annotated.prototype._offInfo = function() {
+  this._infoEnabled = false;
+  this.hotspots.style('opacity', 0.001)
+  this.cutOuts.style('opacity', 0.001);
 };
 
 Annotated.prototype.play = function() {
