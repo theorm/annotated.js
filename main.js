@@ -70,7 +70,13 @@ Annotated.prototype._isTouchDevice = function() {
 };
 
 Annotated.prototype._isVideoAutoplaySupported = function() {
-  return Modernizr.videoautoplay;
+  // return Modernizr.videoautoplay;
+  // XXX does not work in desktop safari
+  if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 Annotated.prototype._getTrueHeight = function(h) {
