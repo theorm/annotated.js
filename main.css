@@ -46,6 +46,10 @@
   z-index: 5;
   bottom: 0;
   left: 0;
+  -webkit-user-select: none;
+}
+.annotated svg.hotspot * {
+  -webkit-user-select: none;
 }
 .annotated svg.hotspot .enabler {
   fill: #000;
@@ -55,10 +59,10 @@
 }
 .annotated svg.hotspot .icon {
   fill: #ccc;
-  -webkit-transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
-  -khtml-transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
-  -moz-transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
-  transform: scale(0.05) translate(2.3em, 4.2em) rotate(-20deg);
+  -webkit-transform: scale(0.05) translate(37px, 67px) rotate(-20deg);
+  -khtml-transform: scale(0.05) translate(37px, 67px) rotate(-20deg);
+  -moz-transform: scale(0.05) translate(37px, 67px) rotate(-20deg);
+  transform: scale(0.05) translate(37px, 67px) rotate(-20deg);
 }
 .annotated .hotspots,
 .annotated .caption {
