@@ -18,6 +18,8 @@ function Annotated(element, annotation, options) {
   this.videoUrl = this.element.attr('data-annotated-video');
   this.videoPosterUrl = this.element.attr('data-annotated-video-poster');
 
+  this.audioUrl = this.element.attr('data-annotated-audio');
+
   /*
     Element structure:
       .wrapper
@@ -56,6 +58,12 @@ function Annotated(element, annotation, options) {
     }
   } else if (this.videoPosterUrl && !this._isVideoAutoplaySupported()) {
     this.img = this.wrapper.append('img').attr('src', this.videoPosterUrl);
+  }
+
+  if (this.audioUrl && this._isVideoAutoplaySupported()) {
+    this.element.append('audio')
+      .attr('src', this.audioUrl)
+      .attr('loop', '');
   }
 
   this.caption = this.element.append('div');
